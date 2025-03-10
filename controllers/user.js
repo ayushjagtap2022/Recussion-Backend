@@ -18,7 +18,9 @@ const Create_User = async (req, res) => {
                   userDetails.save().then((user) => {
                         let generatedToken = tokenGen(res, user._id, user.roles, user.name)
                         generatedToken.then((token) => {
-                              res.status(201).send({ token, name: user.name, roles: user.roles, send: req.body.email });
+                              res.status(201).send({
+                                    token: token, name: user.name, roles: user.roles, send: req.body.email, userid: user._id
+                              });
                         })
                               .catch((error) => {
                                     res.status(500).send(error);
@@ -46,7 +48,7 @@ const login_User = async (req, res) => {
                         if (result) {
                               let generatedToken = tokenGen(res, loginquery._id, loginquery.roles, loginquery.name)
                               generatedToken.then((token) => {
-                                    res.send({ Message: "Successfully Login", roles: loginquery.roles, token, name: loginquery.name, userid: loginquery._id })
+                                    res.send({ Message: "Successfully Login", roles: loginquery.roles, token: token, name: loginquery.name, userid: loginquery._id, send: loginquery.email })
                               })
                         } else {
                               res.status(400).json({ message: 'Invalid credentials' });
